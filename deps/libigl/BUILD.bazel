@@ -1,0 +1,14 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+cc_library (
+    name = "libigl",
+    srcs = glob(["include/igl/opengl/**/*.cpp", "include/igl/*.cpp", "include/igl/*.c"]),
+    hdrs = glob(["include/igl/**", "include/igl/opengl/**", "include/igl/stb/**"]),
+    # includes = ["include/igl/stb"],
+    strip_include_prefix = "include",
+    visibility = ["//visibility:public"],
+    copts = ["-I/usr/include/eigen3/ -I/usr/include/stb/"],
+    linkopts = ["-l glfw"],
+    defines = ["IGL_STATIC_LIBRARY"],
+    deps = ["@//deps/glad_wrapper:glad_wrapper", "@imgui//:imgui", "@imguizmo//:imguizmo"]
+)

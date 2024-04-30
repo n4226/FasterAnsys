@@ -1,0 +1,14 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "rules_cuda",
+    sha256 = "c7bf1da41b5a31480a0477f4ced49eed08ab1cb3aff77c704e373cf9c52694f5",
+    strip_prefix = "rules_cuda-3482c70dc60d9ab1ad26b768c117fcd61ee12494",
+    urls = ["https://github.com/bazel-contrib/rules_cuda/archive/3482c70dc60d9ab1ad26b768c117fcd61ee12494.tar.gz"],
+)
+load("@rules_cuda//cuda:repositories.bzl", "register_detected_cuda_toolchains", "rules_cuda_dependencies")
+rules_cuda_dependencies()
+register_detected_cuda_toolchains()
+
+load("//deps:deps.bzl", "load_deps")
+
+load_deps()

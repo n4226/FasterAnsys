@@ -1,0 +1,11 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+cc_library (
+    name = "glad_wrapper",
+    srcs = glob(["**/*.c"]),
+    hdrs = glob(["**/*.h"]),
+    strip_include_prefix = "include",
+    visibility = ["//visibility:public"],
+    # copts = ["-isystem glad_wrapper/include"]
+    # deps = ["@//deps/glad:glad"]
+)

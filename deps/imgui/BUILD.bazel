@@ -1,0 +1,11 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+cc_library (
+    name = "imgui",
+    # srcs = glob(["include/igl/opengl/**/*.cpp"]),
+    hdrs = glob(["*.h", "backends/imgui_impl_glfw.h", "backends/imgui_impl_opengl3.h"]),
+    # This line is needed for the #includes with <> in dependent libs and bins
+    includes = [""],
+    # strip_include_prefix = "include",
+    visibility = ["//visibility:public"],
+)

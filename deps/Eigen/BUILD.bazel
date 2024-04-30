@@ -1,0 +1,10 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+#//nolonger used -- use system installed lib
+cc_library (
+    name = "Eigen",
+    hdrs = glob(["Eigen/**"],  exclude = ["Eigen/**/CMakeLists.txt"]),
+    # strip_include_prefix = "include",
+    # include_prefix = "",
+    # visibility = ["//visibility:public"],
+)

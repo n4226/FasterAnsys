@@ -1,0 +1,14 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+cc_library (
+    name = "imguizmo",
+    # srcs = glob(["include/igl/opengl/**/*.cpp"]),
+    # hdrs = glob(["*.h", "backends/imgui_impl_glfw.h", "backends/imgui_impl_opengl3.h"]),
+    # srcs = glob(["*.cpp"], exclude = ["GraphEditor.cpp"]),
+    hdrs = glob(["*.h"]),
+    # This line is needed for the #includes with <> in dependent libs and bins
+    includes = [""],
+    # strip_include_prefix = "include",
+    deps = ["@imgui//:imgui"],
+    visibility = ["//visibility:public"],
+)

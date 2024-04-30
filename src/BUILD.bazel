@@ -1,0 +1,16 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("@rules_cuda//cuda:defs.bzl", "cuda_library")
+
+# cuda_library(
+#     name = "kernel",
+#     srcs = ["cuda/cuda.cu"],
+#     hdrs = ["cuda/cuda.h"],
+# )
+
+
+cc_binary(
+    name = "FasterAnsys",
+    srcs = glob(["**/*.cpp"],["**/*.h"]),
+    deps = ["@libigl//:libigl"],
+    copts = ["-I/usr/include/eigen3/"],
+)
