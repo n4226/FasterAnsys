@@ -29,6 +29,24 @@ def load_deps():
         # sha256 = "28772c1155aebd71f818ae43e29427571c4faa5e9cdda3b44b1d2c2dc64297f5",
     )
 
+    maybe(
+        http_archive,
+        name="unvpp",
+        build_file = Label("//deps/unvpp:BUILD.bazel"),
+        strip_prefix = "unvpp-01d972e9126bf98c30b3b36cb0f5d7c8db4515d2",
+        url = "https://github.com/eigemx/unvpp/archive/01d972e9126bf98c30b3b36cb0f5d7c8db4515d2.zip",
+        # sha256 = "28772c1155aebd71f818ae43e29427571c4faa5e9cdda3b44b1d2c2dc64297f5",
+    )
+
+    maybe(
+        http_archive,
+        name="fast_float",
+        build_file = Label("//deps/fast_float:BUILD.bazel"),
+        strip_prefix = "fast_float-6.1.1",
+        url = "https://github.com/fastfloat/fast_float/archive/refs/tags/v6.1.1.zip",
+        # sha256 = "28772c1155aebd71f818ae43e29427571c4faa5e9cdda3b44b1d2c2dc64297f5",
+    )
+
     # maybe(
     #     http_archive,
     #     name="rules_python",

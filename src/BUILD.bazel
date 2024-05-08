@@ -10,7 +10,7 @@ load("@rules_cuda//cuda:defs.bzl", "cuda_library")
 
 cc_binary(
     name = "FasterAnsys",
-    srcs = glob(["**/*.cpp"],["**/*.h"]),
-    deps = ["@libigl//:libigl"],
+    srcs = glob(["**/*"], exclude = ["BUILD.bazel"]),
+    deps = ["@libigl//:libigl", "@unvpp//:unvpp"],
     copts = ["-I/usr/include/eigen3/"],
 )

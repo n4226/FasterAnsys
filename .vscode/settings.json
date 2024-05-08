@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "ostream": "cpp",
+        "optional": "cpp",
+        "type_traits": "cpp",
+        "core": "cpp"
+    }
+}

@@ -1,18 +1,18 @@
 
 #include <iostream>
 
+#include "IGLUtils.h"
+
 // #include <Eigen/Dense>
 // #include "igl/cotmatrix.h"
 
 // #include <igl/readOFF.h>
 // #include <igl/opengl/glfw/Viewer.h>
 #include <igl/opengl/glfw/Viewer.h>
+#include <unvpp/unvpp.h>
 
-
-int main() {
-    printf("Hello\n");
-
-      // Inline mesh of a cube
+void iglTest() {
+        // Inline mesh of a cube
   const Eigen::MatrixXd V= (Eigen::MatrixXd(8,3)<<
     0.0,0.0,0.0,
     0.0,0.0,1.0,
@@ -41,4 +41,55 @@ int main() {
   viewer.data().set_mesh(V, F);
   viewer.data().set_face_based(true);
   viewer.launch();
+}
+
+void unvTest() {
+    unvpp::Mesh mesh = unvpp::read("../cadFiles/TestCube-Static1.unv");
+
+    // print string representation of the mesh system of units
+    // if the mesh does not have a system of units, 
+    // print the default "repr" representation string "Unknown".
+    // Check definition of UnitsSystem in unvpp/unvpp.h file
+    std::cout << "Units system: " 
+              << mesh.unit_system().value_or(unvpp::UnitsSystem()).repr
+              << std::endl;
+
+    // print count of mesh vertices
+    std::cout << "Vertices count = " 
+              << mesh.vertices().size() 
+              << std::endl;
+
+    // print count of mesh elements (cells)
+    std::cout << "Elements count = " 
+              << mesh.elements().value_or(std::vector<unvpp::Element>()).size()
+              << std::endl;
+
+    // print group names and element count (like boundary patches or cell zones)
+    for (auto& group : mesh.groups().value_or(std::vector<unvpp::Group>())) {
+        std::cout << "Group name: " 
+                  << group.name() 
+                  << " - elements count = " 
+                  << group.elements_ids().size()
+                  << std::endl;
+    }
+
+
+  Eigen::MatrixXd V;
+  Eigen::MatrixXi F;
+
+  tetToTry(mesh,V,F);
+
+  // Plot the mesh
+  igl::opengl::glfw::Viewer viewer;
+  viewer.data().set_mesh(V, F);
+  viewer.data().set_face_based(true);
+  viewer.launch(); 
+    
+}
+
+int main() {
+  printf("Hello\n");
+
+  unvTest();
+
 }

@@ -1,0 +1,1 @@
+build:release --cxxopt='-std=c++17'

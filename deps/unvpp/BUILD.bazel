@@ -1,0 +1,13 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+cc_library (
+    name = "unvpp",
+    srcs = glob(["src/*.cpp"]),
+    hdrs = glob(["include/**", "src/*.h"]),
+    includes = ["include/"],
+    # strip_include_prefix = "include",
+    visibility = ["//visibility:public"],
+    # copts = ["-I/usr/include/eigen3/ -I/usr/include/stb/"],
+    # linkopts = ["-l glfw"],
+    deps = ["@fast_float//:fast_float"],
+)
