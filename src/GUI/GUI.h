@@ -7,11 +7,17 @@
 class GUI
 {
 public:
-    GUI();
+    GUI(const std::string& cadFIle);
     ~GUI();
+
+    void start();
+
 private:
     /* data */
-    std::string
+    std::string cadFile;
+
+    unvpp::Mesh mesh;
+
 
     bool key_down(igl::opengl::glfw::Viewer& viewer, unsigned char key, int modifier);
 };

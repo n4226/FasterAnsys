@@ -4,7 +4,7 @@
 #include "IGLUtils.h"
 
 #include <string>
-#include "GUI.h"
+#include "GUI/GUI.h"
 
 // #include <Eigen/Dense>
 // #include "igl/cotmatrix.h"
@@ -103,6 +103,7 @@ int main(int argc, char** argv) {
 
   std::string filePath = argv[1];
 
-  auto gui = GUI();
+  auto gui = GUI(filePath);
 
+  gui.start();
 }

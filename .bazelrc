@@ -1,1 +1,1 @@
-build:release --cxxopt='-std=c++17'
+build:release --cxxopt='-std=c++17' --cxxopt='-w' --cxxopt='-fcompare-debug-second'

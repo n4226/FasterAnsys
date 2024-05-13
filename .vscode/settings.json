@@ -3,6 +3,9 @@
         "ostream": "cpp",
         "optional": "cpp",
         "type_traits": "cpp",
-        "core": "cpp"
+        "core": "cpp",
+        "regex": "cpp",
+        "algorithm": "cpp",
+        "locale": "cpp"
     }
 }
