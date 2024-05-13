@@ -2,9 +2,12 @@
 
 #include "../IGLUtils.h"
 
+GUI* GUI::shared;
+
 GUI::GUI(const std::string &cadFIle)
     : cadFile(cadFIle), mesh(unvpp::read(cadFile))
 {
+    shared = this;
 }
 
 GUI::~GUI()
@@ -45,16 +48,28 @@ void GUI::start()
     igl::opengl::glfw::Viewer viewer;
     viewer.data().set_mesh(V, F);
     viewer.data().set_face_based(true);
-    // viewer.callback_key_down = &std::bind(&GUI::key_down,this);
+    viewer.callback_key_down = key_down;
     viewer.launch(); 
 
 
 }
 
-bool GUI::key_down(igl::opengl::glfw::Viewer &viewer, unsigned char key, int modifier)
+void GUI::solve()
+{
+    if (solver == nullptr)
+        // solver = new CUDASolver();
+        solver = new CPUSolver();
+
+    solver->solve(mesh);
+}
+
+bool key_down(igl::opengl::glfw::Viewer &viewer, unsigned char key, int modifier)
 {
     
-    
-
+    if (key == '1')
+    {
+        GUI::shared->solve();
+    }
+        
     return false;
 }

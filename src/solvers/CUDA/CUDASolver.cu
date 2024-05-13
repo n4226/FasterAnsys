@@ -1,9 +1,14 @@
 #include "CUDASolver.h"
 #include "cuda.h"
 
-void CUDASolver::solve(const int &mesh)
+#include <stdio.h>
+
+
+void CUDASolver::solve(const unvpp::Mesh &mesh)
 {
-    printf("Hello\n");
+ 
+
+
 
     //Split data into Elements
 
@@ -13,6 +18,10 @@ void CUDASolver::solve(const int &mesh)
 
     // Make K invertable
 
-    
+    //solve equation
+
+    //find strain
+
+    //find stress
 
 }

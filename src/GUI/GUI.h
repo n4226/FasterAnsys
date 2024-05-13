@@ -3,6 +3,8 @@
 #include <unvpp/unvpp.h>
 #include <string>
 #include <vector>
+#include "solvers/CUDA/CUDASolver.h"
+#include "solvers/cpu/CPUSolver.h"
 
 class GUI
 {
@@ -12,13 +14,18 @@ public:
 
     void start();
 
+    static GUI* shared;
+
+    void solve();
+
 private:
     /* data */
     std::string cadFile;
 
     unvpp::Mesh mesh;
 
+    Solver* solver = 0;
 
-    bool key_down(igl::opengl::glfw::Viewer& viewer, unsigned char key, int modifier);
 };
 
+    bool key_down(igl::opengl::glfw::Viewer& viewer, unsigned char key, int modifier);

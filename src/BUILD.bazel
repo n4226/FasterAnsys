@@ -4,10 +4,11 @@ load("@rules_cuda//cuda:defs.bzl", "cuda_library")
 
 cuda_library(
     name = "kernel",
-    srcs = glob(["solvers/CUDA/*.cu"]),
-    hdrs = glob(["solvers/CUDA/*.h", "solvers/*.h"]),
+    srcs = glob(["solvers/CUDA/*.cu", "solvers/**/*.cpp"]),
+    hdrs = glob(["solvers/CUDA/*.h", "solvers/**/*.h"]),
+    includes = ["."],
     deps = ["@libigl//:libigl", "@unvpp//:unvpp"],
-    copts = ["-I/usr/include/eigen3/ --stdc++17"],
+    copts = ["-I/usr/include/eigen3/ ", "--std=c++17"],
     # copts = ["--host-compilation c++"],
 )
 
@@ -16,6 +17,6 @@ cuda_library(
 cc_binary(
     name = "FasterAnsys",
     srcs = glob(["**/*"], exclude = ["BUILD.bazel", "solvers/**"]),
-    deps = ["@libigl//:libigl", "@unvpp//:unvpp"],
+    deps = ["@libigl//:libigl", "@unvpp//:unvpp", "kernel"],
     copts = ["-I/usr/include/eigen3/"],
 )
