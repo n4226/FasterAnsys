@@ -17,7 +17,12 @@ namespace tetra {
 
     double volume(Element e);
 
+    //As defined in Rao 11.2
+
+    Eigen::Matrix<double, 12, 12> K(Element e, double youngs_modulus, double poissons_ratio);
     Eigen::Matrix<double, 6, 12> B(Element e);
+    Eigen::Matrix<double, 6, 6> D(Element e, double youngs_modulus, double poissons_ratio);
+
     
     // Helper Mats
 
