@@ -56,8 +56,6 @@ namespace tetra
 
     Eigen::Matrix<double, 6, 6> D(Element e, double youngs_modulus, double poissons_ratio)
     {
-        //i'm not sure what this value is or how to get what value to use. However, in every relevent example I foound in the book, 0.3 was used.
-        double little_v = 0.3;
         double v = poissons_ratio;
         double vFunc = (1 - 2 * v) / 2;
 

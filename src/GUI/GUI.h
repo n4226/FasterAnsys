@@ -18,11 +18,27 @@ public:
 
     void solve();
 
+    void set_boundary_conditions();
+
+    //Debuf
+
+    void color_find_boundary_conditions();
+    void color_boundary_cond();
+
 private:
     /* data */
     std::string cadFile;
 
     unvpp::Mesh mesh;
+
+    igl::opengl::glfw::Viewer viewer;
+    Eigen::MatrixXd V;
+    Eigen::MatrixXi F;
+
+
+    //boundary conditions
+    Eigen::MatrixXd AppliedForces;
+    Eigen::MatrixXd fixed_displacements;
 
     Solver* solver = 0;
 

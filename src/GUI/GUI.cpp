@@ -39,16 +39,18 @@ void GUI::start()
                   << std::endl;
     }
 
-    Eigen::MatrixXd V;
-    Eigen::MatrixXi F;
+    
 
     tetToTry(mesh, V, F);
 
+    set_boundary_conditions();
+
     // Plot the mesh
-    igl::opengl::glfw::Viewer viewer;
     viewer.data().set_mesh(V, F);
     viewer.data().set_face_based(true);
     viewer.callback_key_down = key_down;
+    color_find_boundary_conditions();
+    // color_boundary_cond();
     viewer.launch(); 
 
 
@@ -60,7 +62,89 @@ void GUI::solve()
         // solver = new CUDASolver();
         solver = new CPUSolver();
 
-    solver->solve(mesh);
+    // solver->solve(mesh, {},{});
+}
+
+void GUI::set_boundary_conditions()
+{
+    const double force_to_apply = 1'000;
+
+    fixed_displacements = Eigen::MatrixXd::Zero(mesh.vertices().size() * 3,1);
+    AppliedForces = Eigen::MatrixXd::Zero(mesh.vertices().size() * 3,1);
+
+    auto min_height = V.colwise().minCoeff();
+    auto max_height = V.colwise().maxCoeff();
+
+    const double tolerenceMult = 0.01; // 1% plus or minus top or bottom to be considered part of it;
+    const int chosen_axis = 1; // Y axis
+
+    for (size_t i = 0; i < mesh.vertices().size(); i++)
+    {
+        auto vert = mesh.vertices()[i];
+        if (abs(vert[chosen_axis] - min_height(chosen_axis)) < tolerenceMult) {
+            // Constrained
+            fixed_displacements((i * 3),0) = 1;
+            fixed_displacements((i * 3) + 1,0) = 1;
+            fixed_displacements((i * 3) + 2,0) = 1;
+        }
+
+        if (abs(vert[chosen_axis] - max_height(chosen_axis)) < tolerenceMult) {
+            // Force Applied
+            AppliedForces((i * 3) + chosen_axis,0) = force_to_apply;
+        }
+    }
+
+    std::cout << "Forces: \n" << AppliedForces << "\n"; 
+    std::cout << "Fixed Verts: \n" << fixed_displacements << "\n"; 
+}
+
+void GUI::color_find_boundary_conditions()
+{
+    Eigen::MatrixXd C(mesh.vertices().size(),3);
+    Eigen::MatrixXd data(mesh.vertices().size(),1);
+
+    for (size_t i = 0; i < mesh.vertices().size(); i++)
+    {
+        auto vec = Eigen::Vector3d(mesh.vertices()[i][0],mesh.vertices()[i][1],mesh.vertices()[i][2]);
+        auto val = std::clamp(vec(2) / 10, 0.0,1.0);
+
+        auto col1 = Eigen::Vector3d(1,0.1,0);
+        auto col2 = Eigen::Vector3d(0,0.2,1);
+
+        C.row(i) =  (val * (col2 - col1)) + col1;
+        data(i) = vec(1);
+    }
+    
+
+    // viewer.data().set_colors(C);
+    viewer.data().set_data(data);
+}
+
+void GUI::color_boundary_cond()
+{
+    Eigen::MatrixXd C(mesh.vertices().size(),3);
+    Eigen::MatrixXd data(mesh.vertices().size(),1);
+
+    for (size_t i = 0; i < mesh.vertices().size(); i++)
+    {
+        auto vec = Eigen::Vector3d(mesh.vertices()[i][0],mesh.vertices()[i][1],mesh.vertices()[i][2]);
+        auto val = std::clamp(vec(2) / 10, 0.0,1.0);
+
+        auto col1 = Eigen::Vector3d(1,0,0);
+        auto col2 = Eigen::Vector3d(0,0,1);
+        auto col3 = Eigen::Vector3d(0,0.4,0);
+
+        if (AppliedForces(3*i,0) != 0 || AppliedForces(3*i + 1,0) != 0 || AppliedForces(3*i + 2,0) != 0)
+            C.row(i) = col1;
+        else if (fixed_displacements(3*i,0) != 0 || fixed_displacements(3*i + 1,0) != 0 || fixed_displacements(3*i + 2,0) != 0)
+            C.row(i) = col2;
+        else
+            C.row(i) = col3;
+    }
+    
+
+    viewer.data().set_colors(C);
+    // viewer.data().set_data(data);
 }
 
 bool key_down(igl::opengl::glfw::Viewer &viewer, unsigned char key, int modifier)
@@ -69,6 +153,10 @@ bool key_down(igl::opengl::glfw::Viewer &viewer, unsigned char key, int modifier
     if (key == '1')
     {
         GUI::shared->solve();
+    }
+
+    if (key == '1') {
+        GUI::shared->color_find_boundary_conditions();
     }
         
     return false;
