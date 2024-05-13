@@ -3,6 +3,9 @@
 
 #include "IGLUtils.h"
 
+#include <string>
+#include "GUI.h"
+
 // #include <Eigen/Dense>
 // #include "igl/cotmatrix.h"
 
@@ -43,8 +46,11 @@ void iglTest() {
   viewer.launch();
 }
 
+
+
 void unvTest() {
     unvpp::Mesh mesh = unvpp::read("../cadFiles/TestCube-Static1.unv");
+    // unvpp::Mesh mesh = unvpp::read("../cadFiles/TableWoodRedStaticMidPoly3.UNV");
 
     // print string representation of the mesh system of units
     // if the mesh does not have a system of units, 
@@ -83,13 +89,20 @@ void unvTest() {
   igl::opengl::glfw::Viewer viewer;
   viewer.data().set_mesh(V, F);
   viewer.data().set_face_based(true);
+  // viewer.callback_key_down = &key_down;
   viewer.launch(); 
     
 }
 
-int main() {
-  printf("Hello\n");
+int main(int argc, char** argv) {
 
-  unvTest();
+  if (argc < 2) {
+    printf("Please provide a file path to the tetrahedral file.\n");
+    exit(-1);
+  }
+
+  std::string filePath = argv[1];
+
+  auto gui = GUI();
 
 }
