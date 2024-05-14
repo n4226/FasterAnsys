@@ -1,5 +1,6 @@
 #include "GUI.h"
 
+#include <imgui.h>
 #include "../IGLUtils.h"
 
 GUI* GUI::shared;
@@ -62,12 +63,27 @@ void GUI::solve()
         // solver = new CUDASolver();
         solver = new CPUSolver();
 
-    // solver->solve(mesh, {},{});
+    auto res = solver->solve(mesh, AppliedForces, fixed_displacements);
+
+    // std::cout << "Disp:\n" << res.strain << "\n";
+    // std::cout << "Stress:\n" << res.stress << "\n";
+
+    const double scale = 1E8;
+
+    for (size_t i = 0; i < res.disp.rows(); i+= 3)
+    {
+        V(i / 3,0) += res.disp(i+0) * scale;
+        V(i / 3,1) += res.disp(i+1) * scale;
+        V(i / 3,2) += res.disp(i+2) * scale;
+    }
+
+    viewer.data().set_mesh(V,F);
+    
 }
 
 void GUI::set_boundary_conditions()
 {
-    const double force_to_apply = 1'000;
+    const double force_to_apply = -10'000;
 
     fixed_displacements = Eigen::MatrixXd::Zero(mesh.vertices().size() * 3,1);
     AppliedForces = Eigen::MatrixXd::Zero(mesh.vertices().size() * 3,1);
@@ -83,19 +99,21 @@ void GUI::set_boundary_conditions()
         auto vert = mesh.vertices()[i];
         if (abs(vert[chosen_axis] - min_height(chosen_axis)) < tolerenceMult) {
             // Constrained
-            fixed_displacements((i * 3),0) = 1;
-            fixed_displacements((i * 3) + 1,0) = 1;
-            fixed_displacements((i * 3) + 2,0) = 1;
+            fixed_displacements((i * 3 + chosen_axis + 0),0) = 1;
+
+            // fixed_displacements((i * 3),0) = 1;
+            // fixed_displacements((i * 3) + 1,0) = 1;
+            // fixed_displacements((i * 3) + 2,0) = 1;
         }
 
         if (abs(vert[chosen_axis] - max_height(chosen_axis)) < tolerenceMult) {
             // Force Applied
-            AppliedForces((i * 3) + chosen_axis,0) = force_to_apply;
+            AppliedForces((i * 3) + chosen_axis + 0,0) = force_to_apply;
         }
     }
 
-    std::cout << "Forces: \n" << AppliedForces << "\n"; 
-    std::cout << "Fixed Verts: \n" << fixed_displacements << "\n"; 
+    // std::cout << "Forces: \n" << AppliedForces << "\n"; 
+    // std::cout << "Fixed Verts: \n" << fixed_displacements << "\n"; 
 }
 
 void GUI::color_find_boundary_conditions()
