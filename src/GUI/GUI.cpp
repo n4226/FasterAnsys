@@ -99,11 +99,16 @@ void GUI::set_boundary_conditions()
         auto vert = mesh.vertices()[i];
         if (abs(vert[chosen_axis] - min_height(chosen_axis)) < tolerenceMult) {
             // Constrained
+
+            // Frictionless Support
             fixed_displacements((i * 3 + chosen_axis + 0),0) = 1;
 
-            // fixed_displacements((i * 3),0) = 1;
-            // fixed_displacements((i * 3) + 1,0) = 1;
-            // fixed_displacements((i * 3) + 2,0) = 1;
+            // Frictional Support
+            /*
+            fixed_displacements((i * 3),0) = 1;
+            fixed_displacements((i * 3) + 1,0) = 1;
+            fixed_displacements((i * 3) + 2,0) = 1;
+            */
         }
 
         if (abs(vert[chosen_axis] - max_height(chosen_axis)) < tolerenceMult) {
